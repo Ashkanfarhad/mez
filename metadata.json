@@ -1,0 +1,6 @@
+{
+  "name": "The Sovereign Table — مێزی سەروەری",
+  "description": "Cinematic geopolitical simulation game where you govern the Arven Republic, consult your AI cabinet, manage parliament, and navigate global crises.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

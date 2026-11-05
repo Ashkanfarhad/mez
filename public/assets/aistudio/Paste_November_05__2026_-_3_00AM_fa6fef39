@@ -1,0 +1,272 @@
+THE SOVEREIGN TABLE — REPLACE SCRIPTED DIALOGUE WITH REAL DYNAMIC AI COUNCIL
+
+IMPORTANT: Modify the EXISTING project. Do not start a new app, do not redesign the current interface, and do not remove working game systems or assets. Preserve the current Kurdish Sorani RTL UI and the visual design shown in the existing project.
+
+CORE TASK
+The current council conversation appears to use repeated, prewritten or rule-based replies. Replace that dialogue system with a genuinely dynamic, multi-turn AI conversation powered by the Gemini API already available to this Google AI Studio project (or the project's existing supported Gemini integration). The player must be able to write freely in Kurdish Sorani, express an opinion, disagree, ask difficult questions, change their mind, challenge a minister, or give an instruction. The ministers must respond to the actual meaning and full context of what the player said—not choose from prepared dialogue lines.
+
+1. AUDIT BEFORE CHANGING CODE
+- Inspect the existing project structure, framework, server routes, AI integration, chat components, and game state.
+- Find every hardcoded council reply, canned message, fixed response array, keyword-to-response map, fake typing simulation, and fallback that pretends to be an AI answer.
+- Trace exactly what happens after the player sends a message.
+- Identify whether a real Gemini API request is made and whether prior conversation turns are included.
+- Do not assume the current AI integration works. Verify it in code and fix it.
+- After the audit, implement the change in the existing architecture. Do not merely describe what should be done.
+
+2. REAL MULTI-TURN CONVERSATION
+Every player message must be sent to a server-side Gemini request. The request must receive the relevant conversation history and current game context. Do not generate a fresh isolated answer that forgets the previous turn.
+
+Maintain, at minimum:
+- The current meeting/session ID.
+- The full recent conversation transcript, in chronological order, with speaker identity and timestamps.
+- A compact rolling conversation summary when the transcript becomes too long.
+- The current topic and unresolved questions.
+- The player's latest position, stated intentions, objections, and explicit decisions.
+- Previous promises, arguments, disagreements, and commitments made by each minister.
+- Each minister's relationship and trust toward the player and toward other ministers.
+- The current game-world facts and a snapshot of relevant national statistics.
+
+Persist the transcript and memory using the storage/database mechanism already present in this project. If no persistent store exists, implement a reliable local save mechanism compatible with the existing app. Conversation must survive refreshes and saved-game reloads.
+
+3. EACH MINISTER MUST BE A DISTINCT CONTINUING CHARACTER
+Use the existing six council characters and portraits. Preserve their current names and roles unless the project already has a clearly established alternative. Create a separate, stable character profile for each one, including:
+- Personality and communication style.
+- Professional expertise and limits.
+- Political ideology and priorities, expressed as nuanced interests rather than a single slogan.
+- Personal objectives and institutional interests.
+- Risk tolerance and negotiation style.
+- Current relationship with the player and other ministers.
+- Private concerns and information they know.
+- Memory of previous discussions, promises, disagreements, and decisions.
+
+Character guidance:
+- Prime Minister Rayan Dervan: pragmatic, coalition-focused, concerned with government stability and political survival; can support or challenge the president depending on circumstances.
+- Foreign Minister Lina Araz: diplomatic, patient, attentive to treaties, reputation, leverage, and unintended international consequences.
+- Defence Minister General Darok Saven: security-focused, disciplined, attentive to deterrence, readiness, border risks, and the cost of escalation.
+- Finance Minister Nara Vel: analytical, budget-conscious, attentive to debt, inflation, employment, investment, and the distribution of costs.
+- Intelligence Director Sami Kord: cautious, discreet, evidence-focused, distinguishes confirmed facts from uncertain reports, and protects sensitive sources.
+- Opposition Leader Mira Solen: skeptical, politically independent, scrutinizes government claims, represents competing interests, and may cooperate when there is a credible national reason.
+
+These are starting tendencies, not fixed scripts. Characters must adapt their opinions when evidence, events, incentives, or the player's arguments change. They must not repeat the same opinion simply because they have the same job title.
+
+4. THE PLAYER CAN SPEAK NATURALLY
+- Provide a genuine free-text message input. Do not force the player to select from preset dialogue choices.
+- Understand natural Kurdish Sorani, including colloquial phrasing, spelling variations, long messages, questions, sarcasm, disagreement, and corrections.
+- Reply in natural Kurdish Sorani and preserve right-to-left text direction.
+- Do not translate the player's message into English in the visible UI.
+- Understand references such as “you said earlier”, “I disagree with that”, “what about the agreement?”, “I changed my mind”, or a minister's name.
+- When a statement is ambiguous, ask a natural clarification question instead of guessing.
+- Do not treat every player message as an order. Distinguish between an opinion, hypothetical idea, question, proposal, instruction, and confirmed decision.
+- The player may address one minister by name, address the whole council, or speak to a specific person in the current discussion.
+
+5. REAL DEBATE — NOT SIX AUTOMATIC SPEECHES
+Do not make all six ministers reply in the same fixed order after every player message.
+Create a dynamic meeting orchestrator that decides which character should speak based on the subject, expertise, prior statements, disagreements, private objectives, and relevance.
+- Sometimes one minister responds.
+- Sometimes two or three ministers debate each other.
+- Sometimes a minister asks the player a difficult follow-up question.
+- Sometimes a minister challenges another minister's claim.
+- Sometimes a minister agrees but raises a cost or condition.
+- Sometimes a minister remains silent because the topic is outside their expertise.
+- Allow a relevant minister to interrupt or refer directly to another minister's previous point, when appropriate.
+- Do not force drama or disagreement in every turn. Agreement, uncertainty, hesitation, and silence should also be possible.
+- Give the player control of the floor. Do not let the AI council drown out the player's messages.
+
+6. NATURAL, CONTEXTUAL SPEECH
+Never use a fixed opening sentence or repeated generic phrases such as “Mr President, this is a very important decision” on every turn.
+Never select a reply from a prepared list. Do not paraphrase the player's message and call that a response.
+Every response must address the specific substance of the player's latest message and, where relevant, refer to the actual earlier discussion.
+Ministers should be able to:
+- Explain why they hold a view.
+- Admit when they do not know something.
+- Change their mind and explain why.
+- Point out contradictions in the player's proposal or another minister's reasoning.
+- Ask questions that reveal missing information.
+- Offer alternatives with concrete trade-offs.
+- Remember what they previously promised or warned about.
+- Negotiate, disagree respectfully, persuade, compromise, or refuse.
+
+Avoid repetitive response structures. Vary length naturally: a quick interruption can be one or two sentences; a major briefing can be longer. Do not make every character produce the same length or style of speech.
+
+7. WORLD-AWARE REASONING
+Before generating a reply, provide the model with the relevant current facts from the actual game state, including (when relevant):
+- Country budgets, debt, inflation, unemployment, public approval, government stability, and resources.
+- Current laws, parliamentary composition, election timing, and coalition status.
+- Diplomatic relations, treaties, sanctions, trade agreements, and outstanding negotiations.
+- Military readiness and security alerts.
+- Current events, their causes, and their known consequences.
+- Previous player decisions and pending delayed effects.
+
+The world state is the source of truth. Ministers must not invent statistics, treaties, past decisions, or events. If a fact is unknown, they must say that it is unknown or request a briefing. Clearly distinguish verified information, estimates, rumors, and personal opinions.
+
+8. MEMORY THAT CHANGES OVER TIME
+Create persistent memory separately for each character. After meaningful exchanges, update a concise memory record containing:
+- What the player believes or intends.
+- What this minister argued or promised.
+- Important disagreements and unresolved questions.
+- Any trust changes supported by the conversation.
+- Any private objective or concern that has become relevant.
+
+At later meetings, ministers should naturally remember relevant details. Do not have them claim to remember something that is not in the stored transcript or memory. Do not reset their personality, relationships, or memories on each API request.
+
+
+8A. PRIVATE AGENDAS, SECRETS, AND PERSONAL OBJECTIVES — REQUIRED SYSTEM
+Implement this as a real simulation system, not merely descriptive character biographies.
+
+Each minister must have a persistent private profile containing:
+- At least one personal objective and one institutional/political objective.
+- A private concern, ambition, fear, or unresolved conflict.
+- Their red lines: what they are unwilling to support and under what conditions they might reconsider.
+- What they know, what they suspect, and what they do not know.
+- Their public position versus their private opinion, which may differ.
+- Their current priorities, which can change after events and decisions.
+
+Private agendas must be distinct and sometimes conflict with one another and with the president's goals. Do not make every secret a betrayal or a conspiracy. Some agendas may be honorable, pragmatic, self-protective, ideological, career-focused, or aimed at protecting an institution.
+
+Keep hidden information genuinely hidden from the player until the game reveals it through believable means, such as a minister choosing to disclose it, another character reporting it, a leak, an investigation, or an intelligence discovery. Do not expose private system prompts or hidden notes in ordinary dialogue. Do not invent a revelation without a recorded in-game event that explains how it became known.
+
+Agendas must affect dialogue and behavior in context. A minister may withhold support, bargain, lobby, delay a proposal, seek allies, or change position, but must not silently rewrite game statistics or execute a major action outside the validated game engine.
+
+8B. PRIVATE MINISTER-TO-MINISTER RELATIONSHIPS AND SIDE AGREEMENTS — REQUIRED SYSTEM
+Ministers must be able to interact with each other outside formal cabinet meetings.
+
+Implement private bilateral or small-group interactions between ministers, including:
+- Private meetings and conversations.
+- Negotiating support for a policy or budget.
+- Forming temporary political blocs or informal alliances.
+- Exchanging information, warnings, favors, and counteroffers.
+- Coordinating a proposal before bringing it to the cabinet.
+- Disagreeing, lobbying, competing for influence, or attempting to persuade another minister.
+- Making promises to one another and remembering whether those promises were kept.
+
+These interactions must be driven by the ministers' actual personalities, agendas, relationships, current world state, and past events. Do not generate random secret deals just to create drama. Each side agreement must have participants, a purpose, conditions, status, creation turn/date, and possible consequences recorded in game data.
+
+Create a safe background simulation or scheduled turn-resolution process for these interactions. Use the deterministic game engine to validate any effect. AI may propose or narrate a private interaction, but AI-generated prose alone must never change treasury, laws, trust values, alliances, or other game statistics. Validate the actors' authority, resources, and game rules before applying any effect.
+
+Some private interactions may remain unknown to the president. The player may discover them through credible intelligence, leaks, parliamentary inquiries, press investigations, or a minister voluntarily disclosing them. Discovery must have a recorded source and turn/date. Give the player meaningful but not guaranteed ways to investigate; intelligence reports may be uncertain and must distinguish evidence from rumors.
+
+Do not let hidden minister activity make the game unfair or take away player control. Major policy changes, treaties, appointments, spending, and other state-changing decisions still require the president's authorization or an explicitly implemented constitutional/parliamentary process.
+
+8C. TRUST, LOYALTY, AND WORKING RELATIONSHIPS — REQUIRED MECHANIC
+Implement a persistent relationship model, not a decorative percentage.
+
+Track separate relationship values for:
+- Each minister's trust in the president.
+- Each minister's respect for the president's judgment.
+- Each minister's working relationship with every other minister.
+- Where appropriate, confidence in the cabinet and willingness to cooperate.
+
+Use understandable bounded values (for example, 0–100) and store the reasons and history behind meaningful changes. Do not treat trust, respect, loyalty, and agreement as identical. A minister may trust the president personally while disagreeing with a policy, or agree with a policy while distrusting the president's motives.
+
+Confirmed presidential decisions must be evaluated against each minister's known priorities, promises, red lines, expertise, and earlier arguments. A decision may raise trust with one minister and lower it with another. A broken promise, ignored warning, transparent explanation, fair compromise, evidence-based correction, or fulfilled commitment may change relationships differently.
+
+Do not change trust simply because the player selected a particular dialogue phrase. Base changes on meaningful actions, verified outcomes, and the character's established values. Every significant change must have a reason record, date/turn, before-and-after value, and source event. Avoid arbitrary large swings and repetitive praise or punishment.
+
+Trust must influence future behavior in believable ways: willingness to share information, cooperate, defend a proposal, challenge the president, negotiate, disclose a concern, or keep a private promise. It must not force a minister to agree with everything the player says.
+
+8D. NATIONAL POLITICAL CHRONICLE — COMPLETE, PERSISTENT HISTORY
+Create a permanent, searchable Political Chronicle for the country. It must preserve the full history of the game, not only a short recent chat window.
+
+Record every cabinet meeting and every conversation turn, including:
+- Exact player messages and AI minister responses, in chronological order.
+- Speaker identity, meeting/session ID, date/turn, and topic.
+- Questions, arguments, disagreements, warnings, promises, and unresolved issues.
+- Proposals considered, rejected, postponed, or approved.
+- Confirmed decisions and their reasons.
+- Immediate and delayed consequences when they occur.
+- Changes to trust and minister relationships, with explanations.
+- Private minister meetings and side agreements, stored in the restricted internal history.
+- Intelligence discoveries, leaks, and the source and reliability of each revelation.
+
+The player-facing chronicle must clearly distinguish public records from restricted/secret records. Secret records must not be shown until discovered through valid gameplay. Once a secret is discovered, show when it happened and how it was discovered; do not rewrite earlier public history as though the player knew it at the time.
+
+Persist the full transcript and structured event records across refreshes, sessions, and saved-game reloads. A rolling summary may help Gemini handle long contexts, but it must never replace or delete the original transcript. Add search and filters for date/turn, minister, topic, decision, and event type. Let the player reopen a past meeting and inspect what each person actually said.
+
+If storage limits require archiving, archive complete records rather than silently truncating them. Add schema/version handling and safe migration for existing saved games.
+
+8E. INDEPENDENT OPINIONS AND POLITICAL FRICTION — ENFORCE IN GAMEPLAY
+Each minister must maintain an individual viewpoint that is not derived from the president's latest opinion. Ministers must be able to:
+- Support, oppose, or partially support a proposal for their own reasons.
+- Disagree with the president and explain the evidence or interests behind the disagreement.
+- Disagree with another minister and refer accurately to that minister's actual argument.
+- Remain neutral, uncertain, or silent when appropriate.
+- Change their position after new evidence, negotiation, or a changed situation, and explain why.
+- Refuse an unreasonable request when it conflicts with their authority, expertise, red lines, or objectives.
+
+Do not force artificial conflict in every meeting. Do not make all ministers echo the same talking points. Their positions must evolve consistently with their memory and the world state. If two characters agree, their reasoning and communication style should still remain distinct.
+
+A minister's opinion is not automatically the government's decision. Make the difference between advice, cabinet consensus, parliamentary approval, and presidential authorization explicit in the game rules and interface.
+
+9. DECISIONS MUST BE SEPARATE FROM DIALOGUE
+A minister's spoken opinion must not directly change game statistics.
+Use two separate processes:
+A. Conversation generation: produce natural speech and, optionally, a clearly identified proposal.
+B. Decision engine: only apply an in-game action after the player clearly confirms an actionable decision.
+
+For example, saying “I am thinking about signing a treaty” is not approval to sign it. Saying “Sign the treaty with Kaldor now” may be treated as an instruction, but display the proposed action and its known costs/risks for confirmation if it is irreversible or high impact.
+
+When an action is confirmed:
+- Validate it against the actual game rules and available resources.
+- Apply its effects through the deterministic game engine, not by trusting free-form AI text.
+- Record the action, date/turn, reason, immediate effects, and possible delayed effects.
+- Tell the player what changed and why.
+- Never let an AI-generated dialogue message silently alter the game state.
+
+10. TECHNICAL AND SECURITY REQUIREMENTS
+- Make Gemini requests on the server side using the project's existing supported server/API architecture.
+- Never expose the Gemini API key in browser code, client bundles, logs, or UI.
+- Use the existing environment-variable setup and explain any required variable names in the project README or setup notes.
+- Validate model responses and handle malformed output safely.
+- Add sensible request timeouts, loading states, and error handling.
+- Prevent duplicate submissions while a request is in progress, but allow the player to continue after an error.
+- If the API is unavailable, show a clear error and retry option. Do NOT silently return a canned line and pretend it is a real AI response.
+- Keep private character notes and hidden agendas out of the player's visible message unless the game intentionally reveals them through play.
+- Do not log secrets or unnecessary personal data.
+
+11. CHAT INTERFACE
+Keep the existing council room, adviser portraits, dark visual theme, and Kurdish Sorani RTL design.
+Improve only what is needed for a genuine conversation:
+- A comfortable free-text composer that supports multi-line messages.
+- Clear speaker names and portraits.
+- A visible but subtle “thinking” state while the AI is responding.
+- A way to address a specific minister or the whole council without forcing preset replies.
+- A transcript that can be scrolled and revisited.
+- A clear distinction between spoken dialogue, official briefings, proposals, and confirmed decisions.
+- Do not fill the chat with prewritten sample speeches after the initial load. Start with a concise, natural opening scene, then let the player lead.
+
+12. TESTS — DO NOT SKIP
+Run the app and test real multi-turn dialogue. Use these example exchanges:
+1. Player: “I do not agree with the foreign minister. Explain why this treaty is worth the risk.” The minister must answer the specific objection, not repeat a generic treaty speech.
+2. Player: “You told me last meeting that this would cost less. Why has your position changed?” The relevant minister must refer to the stored earlier statement or admit the earlier statement is not in memory.
+3. Player: “Nara, what happens to inflation if we increase public salaries?” The finance minister must use current game statistics and explain uncertainty and trade-offs.
+4. Player: “I am only considering this. Do not make the decision yet.” No game-state change may occur.
+5. Player: “I changed my mind. I do not want the agreement.” The system must understand the correction and not execute the old proposal.
+6. Player: “General, Lina says diplomacy is enough. What evidence makes you disagree?” The general must respond to Lina's actual argument in the transcript.
+7. Player sends a long, free-form Kurdish Sorani message containing two questions and a disagreement. The system must address both questions and preserve context.
+8. Refresh/reload the saved game. The conversation transcript and minister memories must remain available.
+9. A minister has a private objective that conflicts with another minister's objective. Their behavior must reflect these competing incentives without revealing hidden notes directly.
+10. Two ministers privately negotiate support for a budget proposal between cabinet meetings. The interaction, participants, conditions, and turn must be stored; no policy or national statistic may change unless the game engine validates the result under the rules.
+11. The president approves a policy that benefits one minister's priorities but conflicts with another's earlier warning. Their trust and future behavior must change differently, with an understandable reason record.
+12. The player opens the Political Chronicle and can retrieve the exact wording of an old meeting, including who said what and when. The transcript must survive refresh and saved-game reload.
+13. The player discovers a previously secret side agreement through an intelligence report. The chronicle must record the discovery source and date, while preserving that the agreement was previously unknown to the president.
+14. Two ministers express different opinions about the same proposal. Neither should automatically copy the president's view, and each must give reasons consistent with their own character and memory.
+
+Acceptance criteria:
+- Every new player message triggers a real server-side Gemini request when the service is available.
+- The request includes conversation history and relevant game state.
+- There are no hardcoded minister dialogue replies in the live conversation path.
+- Ministers do not always speak in the same order or all speak on every turn.
+- Ministers have distinguishable voices, priorities, and persistent memories.
+- The player can write anything in Kurdish Sorani and receive context-aware answers.
+- The AI can disagree, ask questions, revise its view, or admit uncertainty.
+- The game state changes only through validated, player-confirmed actions.
+- API failures are visible and are never disguised as AI dialogue.
+- Every minister has persistent private objectives and secrets that affect behavior without being exposed prematurely.
+- Ministers can hold recorded private meetings and side agreements outside cabinet sessions.
+- Trust and working relationships are tracked separately, change for explainable reasons, and influence future behavior.
+- The complete conversation transcript and structured political events are preserved in a searchable Political Chronicle.
+- Public and secret records are separated; secret records are revealed only through valid in-game discovery.
+- Ministers maintain independent views and may disagree with the president and one another.
+
+FINAL INSTRUCTION
+Implement this in the existing project now. Do not stop after writing a plan or a mockup. First identify the current cause of the repeated replies, then replace the scripted dialogue path, connect the real Gemini conversation flow, preserve the current interface, run the tests, and fix all resulting errors. At the end, summarize which files were changed, how conversation history is stored, how the Gemini call is made securely, and which tests passed or failed. Do not claim that real AI conversation works unless you have actually verified the request and response path.
